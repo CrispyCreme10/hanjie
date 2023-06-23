@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
 // grids
 // easy: 5 x 5
@@ -12,28 +12,43 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit, AfterViewInit {
+  @ViewChild('bigContainer') bigContainer!: ElementRef;
+
   grid: number[][] = [];
   rows: number[][] = [];
   cols: number[][] = [];
 
+  userGrid: number[][] = [];
+
   readonly rowCount = 10;
   readonly colCount = 10;
-  readonly desiredPoints = 50;
+  readonly desiredPoints = 75;
 
   ngOnInit(): void {
-    this.fillNonogramGrid();
+    this.userGrid = this.createEmptyGrid();
+    this.fillHanjiGrid();
     this.setRowAndColumnHeaders();
   }
 
-  private fillNonogramGrid() {
-    const grid = [];
-    let generatedPoints = 0;
+  ngAfterViewInit(): void {
+    this.bigContainer.nativeElement.addEventListener('mousedown', (e: MouseEvent) => console.log(e));
+  }
+
+  private createEmptyGrid(): number[][] {
+    const grid: number[][] = [];
 
     // Step 2: Create an empty grid
     for (let i = 0; i < this.rowCount; i++) {
       grid[i] = Array(this.colCount).fill(0);
     }
+
+    return grid;
+  }
+
+  private fillHanjiGrid(): void {
+    const grid = this.createEmptyGrid();
+    let generatedPoints = 0;
 
     // Step 4: Fill the grid with random points
     while (generatedPoints < this.desiredPoints) {
@@ -85,16 +100,13 @@ export class AppComponent implements OnInit{
       if (count > 0)
         this.cols[y].push(count)
     }
-
-    console.log(this.rows);
-    console.log(this.cols);
   }
 
   onGridPointClick(x: number, y: number): void {
     if (this.grid[y][x] === 1) {
-      
+      this.userGrid[y][x] = 1
     } else {
-      
+      this.userGrid[y][x] = -1
     }
   }
 }

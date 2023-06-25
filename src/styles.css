@@ -8,10 +8,6 @@ html, body {
   height: 100%;
 }
 
-body {
-  background: #f3f8ff;
-}
-
 button {
   background-color: #ececec;
   border-radius: 30px;

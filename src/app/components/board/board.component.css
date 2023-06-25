@@ -1,11 +1,21 @@
+:host {
+  --thick-lines: 3px solid black;
+  --thin-lines: 1px solid black;
+}
+
 .big-container {
   display: grid;
-  grid: 1fr 400px 1fr / 1fr 400px 1fr;
   height: 100%;
+}
+
+.header-area {
+  background-color: #f3f8ff;
 }
 
 .col-headers {
   display: flex;
+  height: fit-content;
+  align-self: flex-end;
 
   grid-column: 2 / span 1;
 }
@@ -15,12 +25,22 @@
   flex-direction: column;
   justify-content: flex-end;
   align-items: center;
-  width: 40px;
+  border-right: var(--thin-lines);
+}
+
+.col-header:nth-of-type(5) {
+  border-right: none;
+}
+
+.col-header:nth-of-type(6) {
+  border-left: var(--thick-lines);
 }
 
 .row-headers {
   display: flex;
   flex-direction: column;
+  max-width: fit-content;
+  justify-self: flex-end;
 
   grid-row: 2 / span 1;
 }
@@ -29,31 +49,33 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  height: 40px;
+  border-bottom: var(--thin-lines);
+}
+
+.row-header:nth-of-type(5) {
+  border-bottom: none;
+}
+
+.row-header:nth-of-type(6) {
+  border-top: var(--thick-lines);
 }
 
 .header-box {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 30px;
-  width: 30px;
+  height: 20px;
+  width: 20px;
   user-select: none;
+  font-weight: 500;
 }
 
 .grid {
   display: grid;
   justify-content: center;
   align-content: center;
-  grid: repeat(10, 40px) / repeat(10, 40px);
 
   grid-column: 2 / span 1;
-}
-
-.grid-box {
-  height: 40px;
-  width: 40px;
-  border: 1px solid black;
 }
 
 .grid-box:hover {
@@ -61,5 +83,55 @@
 }
 
 .grid-box-hover:hover {
-  opacity: .5;
+  filter: brightness(0.90);
+}
+
+.row-0,
+.row-5 {
+  border-top: var(--thick-lines);
+}
+
+.col-9 {
+  border-right: var(--thick-lines);
+}
+
+.row-9 {
+  border-bottom: var(--thick-lines);
+}
+
+.col-0,
+.col-5 {
+  border-left: var(--thick-lines);
+}
+
+.col-0:not(.row-4):not(.row-9), 
+.col-1:not(.row-4):not(.row-9), 
+.col-2:not(.row-4):not(.row-9), 
+.col-3:not(.row-4):not(.row-9),
+.col-5:not(.row-4):not(.row-9), 
+.col-6:not(.row-4):not(.row-9), 
+.col-7:not(.row-4):not(.row-9), 
+.col-8:not(.row-4):not(.row-9) {
+  border-right: var(--thin-lines);
+  border-bottom: var(--thin-lines);
+}
+
+.col-4:not(.row-4):not(.row-9),
+.col-9:not(.row-4):not(.row-9) {
+  border-bottom: var(--thin-lines);
+}
+
+.row-4:not(.col-4):not(.col-9),
+.row-9:not(.col-4):not(.col-9) {
+  border-right: var(--thin-lines);
+}
+
+.lives {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  grid-row: 3 / span 1;
+  grid-column: 2 / span 1;
+  font-size: 1.5rem;
+  font-weight: 500;
 }

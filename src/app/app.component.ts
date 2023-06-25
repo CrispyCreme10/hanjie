@@ -6,6 +6,7 @@ import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angula
 // hard: 15 x 15
 // expert: 20 x 20
 // insane: 30 x 30
+// godly: 40 x 40
 
 @Component({
   selector: 'app-root',
@@ -24,39 +25,39 @@ export class AppComponent {
     this.rows = 10;
     this.cols = 10;
     this.pointsFilled = 10;
-    this.desiredPoints = 10 * 10 * 0.75;
-    this.generateBoard = true;
+    this.setCommon();
   }
 
   setMediumSettings(): void {
     this.rows = 10;
     this.cols = 10;
     this.pointsFilled = 0;
-    this.desiredPoints = 10 * 10 * 0.75;
-    this.generateBoard = true;
+    this.setCommon();
   }
 
   setHardSettings(): void {
     this.rows = 15;
     this.cols = 15;
     this.pointsFilled = 0;
-    this.desiredPoints = 15 * 15 * 0.75;
-    this.generateBoard = true;
+    this.setCommon();
   }
 
   setExpertSettings(): void {
     this.rows = 20;
     this.cols = 20;
     this.pointsFilled = 0;
-    this.desiredPoints = 20 * 20 * 0.75;
-    this.generateBoard = true;
+    this.setCommon();
   }
 
   setInsaneSettings(): void {
     this.rows = 30;
     this.cols = 30;
     this.pointsFilled = 0;
-    this.desiredPoints = 30 * 30 * 0.75;
+    this.setCommon();
+  }
+
+  setCommon(): void {
+    this.desiredPoints = this.rows * this.cols * 0.75;
     this.generateBoard = true;
   }
 

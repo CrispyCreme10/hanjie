@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
 // grids
-// easy: 5 x 5
+// easy: 10 x 10 some spaces filled in
 // medium: 10 x 10
 // hard: 15 x 15
 // expert: 20 x 20
@@ -12,101 +12,55 @@ import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angula
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit, AfterViewInit {
-  @ViewChild('bigContainer') bigContainer!: ElementRef;
+export class AppComponent {
+  generateBoard = false;
 
-  grid: number[][] = [];
-  rows: number[][] = [];
-  cols: number[][] = [];
+  rows = 0;
+  cols = 0;
+  pointsFilled = 0;
+  desiredPoints = 0;
 
-  userGrid: number[][] = [];
-
-  readonly rowCount = 10;
-  readonly colCount = 10;
-  readonly desiredPoints = 75;
-
-  ngOnInit(): void {
-    this.userGrid = this.createEmptyGrid();
-    this.fillHanjiGrid();
-    this.setRowAndColumnHeaders();
+  setEasySettings(): void {
+    this.rows = 10;
+    this.cols = 10;
+    this.pointsFilled = 10;
+    this.desiredPoints = 10 * 10 * 0.75;
+    this.generateBoard = true;
   }
 
-  ngAfterViewInit(): void {
-    this.bigContainer.nativeElement.addEventListener('mousedown', (e: MouseEvent) => console.log(e));
+  setMediumSettings(): void {
+    this.rows = 10;
+    this.cols = 10;
+    this.pointsFilled = 0;
+    this.desiredPoints = 10 * 10 * 0.75;
+    this.generateBoard = true;
   }
 
-  private createEmptyGrid(): number[][] {
-    const grid: number[][] = [];
-
-    // Step 2: Create an empty grid
-    for (let i = 0; i < this.rowCount; i++) {
-      grid[i] = Array(this.colCount).fill(0);
-    }
-
-    return grid;
+  setHardSettings(): void {
+    this.rows = 15;
+    this.cols = 15;
+    this.pointsFilled = 0;
+    this.desiredPoints = 15 * 15 * 0.75;
+    this.generateBoard = true;
   }
 
-  private fillHanjiGrid(): void {
-    const grid = this.createEmptyGrid();
-    let generatedPoints = 0;
-
-    // Step 4: Fill the grid with random points
-    while (generatedPoints < this.desiredPoints) {
-      const randomRow = Math.floor(Math.random() * this.rowCount);
-      const randomColumn = Math.floor(Math.random() * this.colCount);
-
-      if (grid[randomRow][randomColumn] === 0) {
-        grid[randomRow][randomColumn] = 1;
-        generatedPoints++;
-      }
-    }
-
-    this.grid = grid;
+  setExpertSettings(): void {
+    this.rows = 20;
+    this.cols = 20;
+    this.pointsFilled = 0;
+    this.desiredPoints = 20 * 20 * 0.75;
+    this.generateBoard = true;
   }
 
-  private setRowAndColumnHeaders(): void {
-    // rows
-    for (let y = 0; y < this.rowCount; y++) {
-      this.rows[y] = [];
-      let count = 0;
-      for (let x = 0; x < this.colCount; x++) {
-        if (this.grid[y][x] === 1) {
-          count++;
-        } else {
-          if (count > 0) {
-            this.rows[y].push(count)
-            count = 0;
-          }
-        }
-      }
-      if (count > 0)
-        this.rows[y].push(count)
-    }
-
-    // cols
-    for (let y = 0; y < this.rowCount; y++) {
-      this.cols[y] = [];
-      let count = 0;
-      for (let x = 0; x < this.colCount; x++) {
-        if (this.grid[x][y] === 1) {
-          count++;
-        } else {
-          if (count > 0) {
-            this.cols[y].push(count)
-            count = 0;
-          }
-        }
-      }
-      if (count > 0)
-        this.cols[y].push(count)
-    }
+  setInsaneSettings(): void {
+    this.rows = 30;
+    this.cols = 30;
+    this.pointsFilled = 0;
+    this.desiredPoints = 30 * 30 * 0.75;
+    this.generateBoard = true;
   }
 
-  onGridPointClick(x: number, y: number): void {
-    if (this.grid[y][x] === 1) {
-      this.userGrid[y][x] = 1
-    } else {
-      this.userGrid[y][x] = -1
-    }
+  gameCompleted(): void {
+    this.generateBoard = false;
   }
 }

@@ -1,22 +1,15 @@
-<div #bigContainer class="big-container">
-  <div class="col-headers header-area">
-    <div *ngFor="let hCol of cols" class="col-header">
-      <span *ngFor="let hc of hCol" class="header-box">{{hc}}</span>
-    </div>
-  </div>
-  <div class="row-headers header-area">
-    <div *ngFor="let hRow of rows" class="row-header">
-      <span *ngFor="let hr of hRow" class="header-box">{{hr}}</span>
-    </div>
-  </div>
-  <div class="grid">
-    <ng-container *ngFor="let row of userGrid; index as y">
-      <div *ngFor="let val of row; index as x" 
-        class="grid-box"
-        [class.bg-emerald-500]="val === 1"
-        [class.bg-white]="val === 0"
-        [class.bg-red-500]="val === -1"
-        (click)="onGridPointClick(x, y)"></div>
-    </ng-container>
-  </div>
-</div>
+<ng-container *ngIf="!generateBoard">
+  <button (click)="setEasySettings()">Easy</button>
+  <button (click)="setMediumSettings()">Medium</button>
+  <button (click)="setHardSettings()">Hard</button>
+  <button (click)="setExpertSettings()">Expert</button>
+  <button (click)="setInsaneSettings()">Insane</button>
+</ng-container>
+
+<ng-container *ngIf="generateBoard">
+  <app-board [rowCount]="rows"
+    [colCount]="cols"
+    [fillPoints]="pointsFilled"
+    [desiredPoints]="desiredPoints"
+    (gameCompleted)="gameCompleted()"></app-board>
+</ng-container>

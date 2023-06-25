@@ -9,5 +9,15 @@ html, body {
 }
 
 body {
-  background: #d9eafd;
+  background: #f3f8ff;
+}
+
+button {
+  background-color: #ececec;
+  border-radius: 30px;
+  padding: 8px 20px;
+}
+
+button:hover {
+  background-color: #cecece;
 }

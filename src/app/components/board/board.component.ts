@@ -1,11 +1,12 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-board',
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.css']
 })
-export class BoardComponent implements OnInit, AfterViewInit{
+export class BoardComponent implements OnInit, AfterViewInit {
   @ViewChild('bigContainer') bigContainer!: ElementRef;
 
   @Input() rowCount: number = 0;
@@ -35,8 +36,11 @@ export class BoardComponent implements OnInit, AfterViewInit{
 
   leftDrag = false;
   rightDrag = false;
+  lastClickedX = 0;
+  lastClickedY = 0;
 
   lives = 5;
+  lifeLost = false;
 
   ngOnInit(): void {
     // styles
@@ -168,6 +172,9 @@ export class BoardComponent implements OnInit, AfterViewInit{
   }
 
   private gridPointSelected(mouseButton: 'left' | 'right', x: number, y: number): void {
+    // reset
+    this.lifeLost = false;
+
     // don't do anything if they click a square that is already filled
     if (this.userGrid[y][x] !== 0) {
       return;
@@ -208,9 +215,8 @@ export class BoardComponent implements OnInit, AfterViewInit{
     // subtract lives if incorrect choice
     if (gridSlotIsFilled && guessedX || !gridSlotIsFilled && guessedFill) {
       this.lives--;
+      this.lifeLost = true;
     }
-
-    console.log(this.lives);
 
     // reset board if they lost all of their lives
     if (this.lives <= 0) {
@@ -307,9 +313,6 @@ export class BoardComponent implements OnInit, AfterViewInit{
       this.colFilledMap.set(i, false);
     }
   }
-
-  lastClickedX = 0;
-  lastClickedY = 0;
 
   onGridPointClick(e: MouseEvent, x: number, y: number): void {
     e.preventDefault();

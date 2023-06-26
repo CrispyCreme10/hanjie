@@ -35,5 +35,8 @@
         (mouseover)="onGridPointHover($event, x, y)"></div>
     </ng-container>
   </div>
-  <div class="lives">Lives: {{lives}}</div>
+  <div class="lives"
+    [class.lost]="lifeLost">
+    <span>Lives: {{lives}}</span>
+  </div>
 </div>

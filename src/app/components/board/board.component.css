@@ -60,6 +60,10 @@
   border-top: var(--thick-lines);
 }
 
+.row-header:last-child {
+  border-bottom: var(--thick-lines);
+}
+
 .header-box {
   display: flex;
   justify-content: center;
@@ -111,18 +115,24 @@
 .col-5:not(.row-4):not(.row-9), 
 .col-6:not(.row-4):not(.row-9), 
 .col-7:not(.row-4):not(.row-9), 
-.col-8:not(.row-4):not(.row-9) {
+.col-8:not(.row-4):not(.row-9),
+.col-10:not(.row-4):not(.row-9), 
+.col-11:not(.row-4):not(.row-9), 
+.col-12:not(.row-4):not(.row-9), 
+.col-13:not(.row-4):not(.row-9) {
   border-right: var(--thin-lines);
   border-bottom: var(--thin-lines);
 }
 
 .col-4:not(.row-4):not(.row-9),
-.col-9:not(.row-4):not(.row-9) {
+.col-9:not(.row-4):not(.row-9),
+.col-14:not(.row-4):not(.row-9) {
   border-bottom: var(--thin-lines);
 }
 
 .row-4:not(.col-4):not(.col-9),
-.row-9:not(.col-4):not(.col-9) {
+.row-9:not(.col-4):not(.col-9),
+.row-14:not(.col-4):not(.col-9) {
   border-right: var(--thin-lines);
 }
 
@@ -134,4 +144,32 @@
   grid-column: 2 / span 1;
   font-size: 1.5rem;
   font-weight: 500;
+}
+
+.lives.lost > span {
+  animation: lostLife 250ms;
+  animation-iteration-count: 3;
+}
+
+@keyframes lostLife {
+  0% {
+    color: red;
+    transform: rotate(0deg);
+  }
+  25% {
+    color: red;
+    transform: rotate(5deg);
+  }
+  50% {
+    color: red;
+    transform: rotate(0deg);
+  }
+  75% {
+    color: red;
+    transform: rotate(-5deg);
+  }
+  100% {
+    color: red;
+    transform: rotate(0deg);
+  }
 }

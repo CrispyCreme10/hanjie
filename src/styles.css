@@ -12,6 +12,7 @@ button {
   background-color: #ececec;
   border-radius: 30px;
   padding: 8px 20px;
+  user-select: none;
 }
 
 button:hover {

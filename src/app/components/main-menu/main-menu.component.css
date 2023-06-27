@@ -1,0 +1,44 @@
+.menu-btn:nth-of-type(even) {
+  animation: 500ms ease-out slideLeftIn;
+}
+
+.menu-btn:nth-of-type(odd) {
+  animation: 500ms ease-out slideRightIn;
+}
+
+.menu-btn:last-child {
+  animation: 500ms ease-out slideUpIn;
+}
+
+@keyframes slideLeftIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideRightIn {
+  0% {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideUpIn {
+  0% {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

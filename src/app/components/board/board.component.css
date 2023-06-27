@@ -28,11 +28,11 @@
   border-right: var(--thin-lines);
 }
 
-.col-header:nth-of-type(5) {
+.col-header:nth-of-type(5n) {
   border-right: none;
 }
 
-.col-header:nth-of-type(6) {
+.col-header:nth-of-type(6n) {
   border-left: var(--thick-lines);
 }
 
@@ -52,11 +52,11 @@
   border-bottom: var(--thin-lines);
 }
 
-.row-header:nth-of-type(5) {
+.row-header:nth-of-type(5n) {
   border-bottom: none;
 }
 
-.row-header:nth-of-type(6) {
+.row-header:nth-of-type(6n) {
   border-top: var(--thick-lines);
 }
 
@@ -87,7 +87,7 @@
 }
 
 .grid-box-hover:hover {
-  filter: brightness(0.90);
+  /* filter: brightness(0.90); */
 }
 
 .row-0,

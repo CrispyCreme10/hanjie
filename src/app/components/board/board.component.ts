@@ -172,9 +172,6 @@ export class BoardComponent implements OnInit, AfterViewInit {
   }
 
   private gridPointSelected(mouseButton: 'left' | 'right', x: number, y: number): void {
-    // reset
-    this.lifeLost = false;
-
     // don't do anything if they click a square that is already filled
     if (this.userGrid[y][x] !== 0) {
       return;

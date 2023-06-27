@@ -69,15 +69,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
     this.bigContainer.nativeElement.addEventListener('contextmenu', (e: MouseEvent) => e.preventDefault());
   }
 
-  private createEmptyGrid(): number[][] {
-    const grid: number[][] = [];
-
-    for (let i = 0; i < this.rowCount; i++) {
-      grid[i] = Array(this.colCount).fill(0);
-    }
-
-    return grid;
-  }
+  
 
   private setGridBoxSize(): void {
     if (this.rowCount <= 15) {
@@ -89,24 +81,6 @@ export class BoardComponent implements OnInit, AfterViewInit {
     }
 
     this.gridBoxSize = 20;
-  }
-
-  private fillHanjiGrid(): void {
-    const grid = this.createEmptyGrid();
-    let generatedPoints = 0;
-
-    //Fill the grid with random points
-    while (generatedPoints < this.desiredPoints) {
-      const randomRow = Math.floor(Math.random() * this.rowCount);
-      const randomColumn = Math.floor(Math.random() * this.colCount);
-
-      if (grid[randomRow][randomColumn] === 0) {
-        grid[randomRow][randomColumn] = 1;
-        generatedPoints++;
-      }
-    }
-
-    this.grid = grid;
   }
 
   private setRowAndColumnHeaders(): void {

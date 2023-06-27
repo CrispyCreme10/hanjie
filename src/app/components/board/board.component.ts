@@ -1,5 +1,7 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
+import { BoardOptions, BoardService } from 'src/app/services/board.service';
 
 @Component({
   selector: 'app-board',
@@ -42,14 +44,28 @@ export class BoardComponent implements OnInit, AfterViewInit {
   lives = 5;
   lifeLost = false;
 
+  id!: string;
+  board!: number[][];
+  opts!: BoardOptions;
+
+  constructor(
+    private boardService: BoardService,
+    private route: ActivatedRoute
+  ) { }
+
   ngOnInit(): void {
+    // this.id = this.route.snapshot.paramMap.get('id') ?? '';
+    this.route.data.subscribe(data => {
+      console.log(data);
+    })
+
+
     // styles
     this.setGridBoxSize();
     this.gridSize = this.gridBoxSize * this.rowCount;
 
     this.size = this.rowCount * this.colCount;
     this.adjustedSize = this.size - this.fillPoints;
-    this.fillHanjiGrid();
     this.setRowAndColumnHeaders();
     this.setUserGrid();
   }
@@ -68,8 +84,6 @@ export class BoardComponent implements OnInit, AfterViewInit {
     });
     this.bigContainer.nativeElement.addEventListener('contextmenu', (e: MouseEvent) => e.preventDefault());
   }
-
-  
 
   private setGridBoxSize(): void {
     if (this.rowCount <= 15) {
@@ -122,7 +136,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
   }
 
   private setUserGrid(): void {
-    this.userGridInitial = this.createEmptyGrid();
+    this.userGridInitial = this.boardService.createEmptyBoard(this.opts);
     if (this.fillPoints > 0) {
       this.fillHandicapPoints();
     } else {
@@ -263,7 +277,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
   }
 
   private resetUserGrid(): void {
-    this.userGrid = this.createEmptyGrid();
+    this.userGrid = this.boardService.createEmptyBoard(this.opts);
     for(let x = 0; x < this.rowCount; x++) {
       for (let y = 0; y < this.colCount; y++) {
         this.userGrid[x][y] = this.userGridInitial[x][y];

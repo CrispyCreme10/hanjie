@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { SHA256 } from 'crypto-js';
 
 
-interface BoardOptions {
+export interface BoardOptions {
   rows: number;
   cols: number;
   desiredPoints?: number;
@@ -14,14 +15,15 @@ interface BoardOptions {
 })
 export class BoardService {
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   createBoardAndNavigate(opts: BoardOptions) {
     const board = this.createBoard(opts);
-    console.log(this.hash(board));
+    const id = this.hash(board);
+    this.router.navigate(['board', { id: id, board: board, opts: opts }])
   }
 
-  private createEmptyBoard(opts: BoardOptions): number[][] {
+  createEmptyBoard(opts: BoardOptions): number[][] {
     const board: number[][] = [];
 
     for (let i = 0; i < opts.rows; i++) {

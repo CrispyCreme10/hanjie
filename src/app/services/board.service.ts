@@ -1,13 +1,22 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { SHA256 } from 'crypto-js';
+import { Board } from '../resources/models/board';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { ApiRoutes, environment } from 'src/environment/environment';
 
 
 export interface BoardOptions {
   rows: number;
   cols: number;
-  desiredPoints?: number;
-  desiredPointsPercentage?: number;
+  hits?: number;
+  hitsPercentage?: number;
+}
+
+export interface BoardRouteData {
+  board: Board,
+  opts: BoardOptions
 }
 
 @Injectable({
@@ -15,12 +24,15 @@ export interface BoardOptions {
 })
 export class BoardService {
 
-  constructor(private router: Router) { }
+  constructor(
+    private http: HttpClient,
+    private router: Router
+  ) { }
 
-  createBoardAndNavigate(opts: BoardOptions) {
-    const board = this.createBoard(opts);
-    const id = this.hash(board);
-    this.router.navigate(['board', { id: id, board: board, opts: opts }])
+  async createBoardAndNavigate(opts: BoardOptions) {
+    const board = await this.http
+      .post<Board>(`${environment.baseUrl}/${ApiRoutes.Board}`, opts);
+    this.router.navigateByUrl('/board', { state: { board: board, opts: opts }});
   }
 
   createEmptyBoard(opts: BoardOptions): number[][] {
@@ -38,8 +50,8 @@ export class BoardService {
     let generatedPoints = 0;
 
     //Fill the board with random points
-    let desiredPoints = opts.desiredPoints ?? 0;
-    const dpp = (opts.desiredPointsPercentage ?? 0);
+    let desiredPoints = opts.hits ?? 0;
+    const dpp = (opts.hitsPercentage ?? 0);
     if (dpp > 0 && dpp < 1) {
       desiredPoints = opts.rows * opts.cols * dpp;
     }

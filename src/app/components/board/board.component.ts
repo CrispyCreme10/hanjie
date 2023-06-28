@@ -1,7 +1,6 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
-import { BoardOptions, BoardService } from 'src/app/services/board.service';
+import { Router } from '@angular/router';
+import { BoardOptions, BoardRouteData, BoardService } from 'src/app/services/board.service';
 
 @Component({
   selector: 'app-board',
@@ -11,11 +10,6 @@ import { BoardOptions, BoardService } from 'src/app/services/board.service';
 export class BoardComponent implements OnInit, AfterViewInit {
   @ViewChild('bigContainer') bigContainer!: ElementRef;
 
-  @Input() rowCount: number = 0;
-  @Input() colCount: number = 0;
-  @Input() fillPoints: number = 0;
-  @Input() desiredPoints: number = 0;
-
   @Output() gameCompleted: EventEmitter<any> = new EventEmitter<any>();
 
   // styles
@@ -23,6 +17,10 @@ export class BoardComponent implements OnInit, AfterViewInit {
   headerSpacing = 0.85;
   gridSize = 0;
 
+  rowCount: number = 0;
+  colCount: number = 0;
+  fillPoints: number = 0;
+  desiredPoints: number = 0;
   size = 0;
   adjustedSize = 0; // size after subtracting handicap fill points
   grid: number[][] = [];
@@ -50,16 +48,14 @@ export class BoardComponent implements OnInit, AfterViewInit {
 
   constructor(
     private boardService: BoardService,
-    private route: ActivatedRoute
-  ) { }
+    private router: Router
+  ) {
+    const {board, opts} = this.router.getCurrentNavigation()?.extras.state as BoardRouteData;
+    this.rowCount = opts.rows;
+    this.colCount = opts.cols;
+  }
 
   ngOnInit(): void {
-    // this.id = this.route.snapshot.paramMap.get('id') ?? '';
-    this.route.data.subscribe(data => {
-      console.log(data);
-    })
-
-
     // styles
     this.setGridBoxSize();
     this.gridSize = this.gridBoxSize * this.rowCount;

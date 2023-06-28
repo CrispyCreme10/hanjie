@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { BoardService } from 'src/app/services/board.service';
 
 // grids
@@ -25,7 +26,10 @@ export class MainMenuComponent {
   pointsFilled = 0;
   desiredPoints = 0;
 
-  constructor (private boardService: BoardService) {}
+  constructor (
+    private boardService: BoardService,
+    private router: Router
+  ) {}
 
   private setState(newState: MenuState): void {
     this.state = newState;
@@ -48,11 +52,12 @@ export class MainMenuComponent {
   }
 
   startEasyGame(): void {
-    this.boardService.createBoardAndNavigate({
+    const opts = {
       rows: 10,
       cols: 10,
-      desiredPointsPercentage: 0.75
-    });
+      hitsPercentage: 0.75
+    };
+    this.boardService.createBoardAndNavigate(opts);
   }
 
   startMediumGame(): void {

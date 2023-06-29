@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ApiRoutes, environment } from 'src/environment/environment';
 
+export type GameDifficulty = 'easy' | 'medium' | 'hard';
 
 export interface BoardOptions {
   rows: number;
@@ -15,8 +16,9 @@ export interface BoardOptions {
 }
 
 export interface BoardRouteData {
-  board: Board,
-  opts: BoardOptions
+  cells: number[][],
+  opts: BoardOptions,
+  handicapPoints: number
 }
 
 @Injectable({
@@ -29,10 +31,21 @@ export class BoardService {
     private router: Router
   ) { }
 
-  async createBoardAndNavigate(opts: BoardOptions) {
-    const board = await this.http
-      .post<Board>(`${environment.baseUrl}/${ApiRoutes.Board}`, opts);
-    this.router.navigateByUrl('/board', { state: { board: board, opts: opts }});
+  createBoard(opts: BoardOptions): Observable<Board> {
+    return this.http.post<Board>(`${environment.baseUrl}/api/${ApiRoutes.Board}`, opts);
+  }
+
+  createBoardAndNavigate(opts: BoardOptions, gameDifficulty: GameDifficulty) {
+    this.createBoard(opts)
+      .subscribe(board => {
+        this.router.navigateByUrl(`board/${board.boardId}`, { 
+          state: { 
+            cells: board.cells, 
+            opts: opts,
+            handicapPoints: gameDifficulty === 'easy' ? 10 : 0
+          }
+        });
+      });    
   }
 
   createEmptyBoard(opts: BoardOptions): number[][] {
@@ -45,7 +58,7 @@ export class BoardService {
     return board;
   }
 
-  createBoard(opts: BoardOptions): number[][] {
+  createLocalBoard(opts: BoardOptions): number[][] {
     const board = this.createEmptyBoard(opts);
     let generatedPoints = 0;
 

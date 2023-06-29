@@ -136,6 +136,12 @@
   border-right: var(--thin-lines);
 }
 
+/* DRAG */
+.drag-selected {
+  border: 3px solid lightblue;
+  background-color: lightcyan;
+}
+
 .lives {
   display: flex;
   justify-content: center;

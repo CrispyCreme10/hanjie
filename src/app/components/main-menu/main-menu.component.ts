@@ -57,7 +57,7 @@ export class MainMenuComponent {
       cols: 10,
       hitsPercentage: 0.75
     };
-    this.boardService.createBoardAndNavigate(opts);
+    this.boardService.createBoardAndNavigate(opts, 'easy');
   }
 
   startMediumGame(): void {

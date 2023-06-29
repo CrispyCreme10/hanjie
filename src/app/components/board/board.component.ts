@@ -1,6 +1,41 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BoardOptions, BoardRouteData, BoardService } from 'src/app/services/board.service';
+
+type MouseButtonDrag = 'left' | 'right';
+type DragDirection = 'up' | 'right' | 'down' | 'left';
+type CellDragPosition = 'start' | 'middle' | 'end';
+interface CellDragState {
+  position: CellDragPosition,
+  direction: DragDirection
+}
+
+class DragState {
+  cellStates = [];
+  button!: MouseButtonDrag;
+  direction!: DragDirection;
+
+  updateCells(x: number, y: number): CellDragState | null {
+    // if (!this.direction) {
+
+    // }
+
+    // if (this.cellStates?.length === 1) {
+
+    // }
+    // // can determine direction after 2nd cell has been chosen
+
+    // let position: CellDragPosition;
+    // if (this.cellStates?.length === 1) {
+    //   position = 'start';
+    // } else if (this.cellStates > 1)
+    // return {
+    //   position: 
+    // };
+
+    return null;
+  }
+}
 
 @Component({
   selector: 'app-board',
@@ -19,7 +54,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
 
   rowCount: number = 0;
   colCount: number = 0;
-  fillPoints: number = 0;
+  handicapPoints: number = 0;
   desiredPoints: number = 0;
   size = 0;
   adjustedSize = 0; // size after subtracting handicap fill points
@@ -42,26 +77,32 @@ export class BoardComponent implements OnInit, AfterViewInit {
   lives = 5;
   lifeLost = false;
 
-  id!: string;
-  board!: number[][];
   opts!: BoardOptions;
+  dragState!: DragState | null;
 
   constructor(
     private boardService: BoardService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
-    const {board, opts} = this.router.getCurrentNavigation()?.extras.state as BoardRouteData;
+    const {cells, opts, handicapPoints} = this.router.getCurrentNavigation()?.extras.state as BoardRouteData;
     this.rowCount = opts.rows;
     this.colCount = opts.cols;
+
+    this.grid = cells;
+    this.opts = opts;
+    this.handicapPoints = handicapPoints;
   }
 
   ngOnInit(): void {
+    this.getBoardData();
+
     // styles
     this.setGridBoxSize();
     this.gridSize = this.gridBoxSize * this.rowCount;
 
     this.size = this.rowCount * this.colCount;
-    this.adjustedSize = this.size - this.fillPoints;
+    this.adjustedSize = this.size - this.handicapPoints;
     this.setRowAndColumnHeaders();
     this.setUserGrid();
   }
@@ -73,12 +114,25 @@ export class BoardComponent implements OnInit, AfterViewInit {
       } else if (e.button === 2) {
         this.rightDrag = true;
       }
+
+      // initialize DragState
+      this.dragState = new DragState();
+      this.dragState.button = this.leftDrag ? 'left' : 'right';
     });
     this.bigContainer.nativeElement.addEventListener('mouseup', (e: MouseEvent) => {
       this.leftDrag = false;
       this.rightDrag = false;
+
+      // apply DragState
+      // clear DragState
+      this.dragState = null;
     });
     this.bigContainer.nativeElement.addEventListener('contextmenu', (e: MouseEvent) => e.preventDefault());
+  }
+
+  private getBoardData(): void {
+    const id = this.route.snapshot.paramMap.get("id");
+    console.log(id);
   }
 
   private setGridBoxSize(): void {
@@ -133,7 +187,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
 
   private setUserGrid(): void {
     this.userGridInitial = this.boardService.createEmptyBoard(this.opts);
-    if (this.fillPoints > 0) {
+    if (this.handicapPoints > 0) {
       this.fillHandicapPoints();
     } else {
       this.resetUserGrid();
@@ -144,7 +198,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
     let filledPoints = 0;
 
     //Fill the grid with random fill points
-    while (filledPoints < this.fillPoints) {
+    while (filledPoints < this.handicapPoints) {
       const randomRow = Math.floor(Math.random() * this.rowCount);
       const randomColumn = Math.floor(Math.random() * this.colCount);
 
@@ -155,7 +209,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
     this.resetUserGrid();
   }
 
-  private gridPointSelected(mouseButton: 'left' | 'right', x: number, y: number): void {
+  private gridPointSelected(mouseButton: MouseButtonDrag, x: number, y: number): void {
     // don't do anything if they click a square that is already filled
     if (this.userGrid[y][x] !== 0) {
       return;
@@ -309,8 +363,14 @@ export class BoardComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    if (this.leftDrag || this.rightDrag) {
-      this.gridPointSelected(this.leftDrag ? 'left' : 'right', x, y);
+    if (this.leftDrag || this.rightDrag && this.dragState) {
+      // old logic...may still use eventually
+      // this.gridPointSelected(this.leftDrag ? 'left' : 'right', x, y);
+
+      const added = this.dragState?.updateCells(x, y);
+      if (added) {
+        // apply styles
+      }
     }
   }
 }

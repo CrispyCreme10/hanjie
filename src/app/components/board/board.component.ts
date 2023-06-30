@@ -16,9 +16,18 @@ class DragState {
   direction!: DragDirection;
 
   updateCells(x: number, y: number): CellDragState | null {
-    // if (!this.direction) {
+    let cell = null;
+    try {
+      cell = this.cellStates[x][y];
+      return null;
+    } catch (error) {
+      
+    }
 
-    // }
+    // check if valid cell to add
+    if (!this.direction) {
+      
+    }
 
     // if (this.cellStates?.length === 1) {
 

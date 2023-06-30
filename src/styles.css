@@ -16,5 +16,6 @@ button {
 }
 
 button:hover {
-  background-color: #cecece;
+  box-shadow: 0 4px 15px #516486;
+  transform: scale(1.05);
 }

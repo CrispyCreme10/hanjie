@@ -35,14 +35,13 @@ export class BoardService {
     return this.http.post<Board>(`${environment.baseUrl}/api/${ApiRoutes.Board}`, opts);
   }
 
-  createBoardAndNavigate(opts: BoardOptions, gameDifficulty: GameDifficulty) {
+  createBoardAndNavigate(opts: BoardOptions) {
     this.createBoard(opts)
       .subscribe(board => {
         this.router.navigateByUrl(`board/${board.boardId}`, { 
           state: { 
             cells: board.cells, 
-            opts: opts,
-            handicapPoints: gameDifficulty === 'easy' ? 10 : 0
+            opts: opts
           }
         });
       });    

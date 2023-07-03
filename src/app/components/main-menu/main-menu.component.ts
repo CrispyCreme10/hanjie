@@ -51,21 +51,13 @@ export class MainMenuComponent {
     this.setState('settings');
   }
 
-  startEasyGame(): void {
+  start(size: number) {
     const opts = {
-      rows: 10,
-      cols: 10,
+      rows: size,
+      cols: size,
       hitsPercentage: 0.75
     };
-    this.boardService.createBoardAndNavigate(opts, 'easy');
-  }
-
-  startMediumGame(): void {
-    
-  }
-
-  startHardGame(): void {
-    
+    this.boardService.createBoardAndNavigate(opts);
   }
 
   setEasySettings(): void {

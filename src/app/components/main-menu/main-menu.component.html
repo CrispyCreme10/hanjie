@@ -7,9 +7,11 @@
       <button class="menu-btn text-xl font-medium w-48" (click)="onSettings()">Settings</button>
     </ng-container>
     <ng-container *ngIf="state === 'play'">
-      <button class="menu-btn text-xl font-medium w-48" (click)="startEasyGame()">Easy</button>
-      <button class="menu-btn text-xl font-medium w-48" (click)="startMediumGame()">Medium</button>
-      <button class="menu-btn text-xl font-medium w-48" (click)="startHardGame()">Hard</button>
+      <button class="menu-btn text-xl font-medium w-48" (click)="start(5)">5 x 5</button>
+      <button class="menu-btn text-xl font-medium w-48" (click)="start(10)">10 x 10</button>
+      <button class="menu-btn text-xl font-medium w-48" (click)="start(15)">15 x 15</button>
+      <button class="menu-btn text-xl font-medium w-48" (click)="start(20)">20 x 20</button>
+      <button class="menu-btn text-xl font-medium w-48" (click)="start(30)">30 x 30</button>
       <button class="menu-btn text-xl font-medium w-48" (click)="goToState('initial')">Back</button>
     </ng-container>
   </div>

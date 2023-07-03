@@ -1,5 +1,5 @@
 <div class="menu"
-  [style.display]="isMenuOpen ? 'flex' : 'none'">
+  [class.active]="isMenuOpen">
   <span>Home</span>
   <span>Refresh</span>
 </div>
@@ -8,45 +8,61 @@
   <fa-icon [icon]="faBars" (click)="toggleMenu()"></fa-icon>
 </div>
 
-<div #bigContainer 
-  class="big-container"
-  [style.grid]="'1fr ' + gridSize + 'px 1fr / 1fr ' + gridSize + 'px 1fr'">
-  <div class="col-headers header-area">
-    <div *ngFor="let hCol of cols; index as colIndex" 
-      class="col-header"
-      [style.width.px]="gridBoxSize">
-      <span *ngFor="let hc of hCol" 
-        class="header-box"
-        [style.opacity]="colFilledMap.get(colIndex) ? '0.2' : '1'">{{hc}}</span>
+<div class="board-container">
+  <div class="board-title-bar">
+    {{rowCount + ' x ' + rowCount}}
+  </div>
+  <div #bigContainer 
+    class="big-container"
+    [style.grid]="'1fr ' + gridSize + 'px 1fr / 1fr ' + gridSize + 'px 1fr'">
+    <div class="col-headers header-area">
+      <div *ngFor="let hCol of cols; index as colIndex" 
+        class="col-header"
+        [style.width.px]="gridBoxSize">
+        <span *ngFor="let hc of hCol" 
+          class="header-box"
+          [style.opacity]="colFilledMap.get(colIndex) ? '0.2' : '1'">{{hc}}</span>
+      </div>
     </div>
-  </div>
-  <div class="row-headers header-area">
-    <div *ngFor="let hRow of rows; index as rowIndex" 
-      class="row-header"
-      [style.height.px]="gridBoxSize">
-      <span *ngFor="let hr of hRow" 
-        class="header-box"
-        [style.opacity]="rowFilledMap.get(rowIndex) ? '0.2' : '1'">{{hr}}</span>
+    <div class="row-headers header-area">
+      <div *ngFor="let hRow of rows; index as rowIndex" 
+        class="row-header"
+        [style.height.px]="gridBoxSize">
+        <span *ngFor="let hr of hRow" 
+          class="header-box"
+          [style.opacity]="rowFilledMap.get(rowIndex) ? '0.2' : '1'">{{hr}}</span>
+      </div>
     </div>
-  </div>
-  <div class="grid"
-    [style.grid]="'repeat(' + rowCount + ', ' + gridBoxSize + 'px) / repeat(' + colCount + ', ' + gridBoxSize + 'px)'">
-    <ng-container *ngFor="let row of userGrid; index as y">
-      <div *ngFor="let val of row; index as x" 
-        class="grid-box"
-        [ngClass]="['row-' + y, 'col-' + x]"
-        [class.grid-box-hover]="val === 0"
-        [class.bg-emerald-500]="val === 1"
-        [class.bg-white]="val === 0"
-        [class.bg-red-500]="val === -1"
-        [style.height.px]="gridBoxSize"
-        [style.width.px]="gridBoxSize"
-        (mousedown)="onGridPointClick($event, x, y)"
-        (mouseover)="onGridPointHover($event, x, y)"></div>
-    </ng-container>
-  </div>
-  <div class="lives"
-    [class.lost]="lifeLost">
-    <span>Lives: {{lives}}</span>
+    <div class="grid"
+      [style.grid]="'repeat(' + rowCount + ', ' + gridBoxSize + 'px) / repeat(' + colCount + ', ' + gridBoxSize + 'px)'">
+      <ng-container *ngFor="let row of userGrid; index as y">
+        <div *ngFor="let val of row; index as x" 
+          class="grid-box"
+          [ngClass]="['row-' + y, 'col-' + x]"
+          [class.grid-box-hover]="val === 0"
+          [class.bg-emerald-500]="val === 1"
+          [class.bg-white]="val === 0"
+          [class.bg-red-500]="val === -1"
+          [style.height.px]="gridBoxSize"
+          [style.width.px]="gridBoxSize"
+          (mousedown)="onGridPointClick($event, x, y)"
+          (mouseover)="onGridPointHover($event, x, y)"></div>
+      </ng-container>
+    </div>
+    <div class="lives"
+      [class.lost]="lifeLost">
+      <span>Lives: {{lives}}</span>
+    </div>
   </div>
 </div>
+
+<ng-container *ngIf="gameComplete">
+  <div class="modal-container">
+    <div class="modal">
+      <button>View Board</button>
+      <button>Share</button>
+      <button>Back to Main</button>
+      <button>Back to Game Modes</button>
+    </div>
+  </div>
+</ng-container>

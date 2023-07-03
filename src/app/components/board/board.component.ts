@@ -55,8 +55,6 @@ class DragState {
 export class BoardComponent implements OnInit, AfterViewInit {
   @ViewChild('bigContainer') bigContainer!: ElementRef;
 
-  @Output() gameCompleted: EventEmitter<any> = new EventEmitter<any>();
-
   // styles
   gridBoxSize = 0;
   headerSpacing = 0.85;
@@ -86,6 +84,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
 
   lives = 5;
   lifeLost = false;
+  gameComplete = false;
 
   opts!: BoardOptions;
   dragState!: DragState | null;
@@ -99,13 +98,12 @@ export class BoardComponent implements OnInit, AfterViewInit {
     private router: Router,
     private route: ActivatedRoute
   ) {
-    const {cells, opts, handicapPoints} = this.router.getCurrentNavigation()?.extras.state as BoardRouteData;
+    const {cells, opts} = this.router.getCurrentNavigation()?.extras.state as BoardRouteData;
     this.rowCount = opts.rows;
     this.colCount = opts.cols;
 
     this.grid = cells;
     this.opts = opts;
-    this.handicapPoints = handicapPoints;
   }
 
   ngOnInit(): void {
@@ -275,7 +273,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
 
     // handle end of winning game
     if (this.rowsFilled === this.rowCount && this.colsFilled === this.colCount) {
-      this.gameCompleted.emit();
+      this.gameComplete = true;
     }
   }
 
@@ -365,7 +363,6 @@ export class BoardComponent implements OnInit, AfterViewInit {
 
   onGridPointClick(e: MouseEvent, x: number, y: number): void {
     e.preventDefault();
-    console.log('onGridPointClick');
     this.lastClickedX = x;
     this.lastClickedY = y;
     this.gridPointSelected(e.button === 0 ? 'left' : 'right', x, y);
@@ -377,14 +374,18 @@ export class BoardComponent implements OnInit, AfterViewInit {
       return;
     }
 
+    // reset life lost on hover
+    this.lifeLost = false;
+
     if (this.leftDrag || this.rightDrag && this.dragState) {
       // old logic...may still use eventually
-      // this.gridPointSelected(this.leftDrag ? 'left' : 'right', x, y);
+      this.gridPointSelected(this.leftDrag ? 'left' : 'right', x, y);
 
-      const added = this.dragState?.updateCells(x, y);
-      if (added) {
-        // apply styles
-      }
+      // new logic...WIP
+      // const added = this.dragState?.updateCells(x, y);
+      // if (added) {
+      //   // apply styles
+      // }
     }
   }
 

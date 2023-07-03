@@ -295,14 +295,25 @@ export class BoardComponent implements OnInit, AfterViewInit {
     // note: completed section
 
     // row
-    let headerRowIndex = 0;
     let headerRow = this.rows.get(y);
     if (headerRow) {
-      const count: number = headerRow[headerRowIndex]?.count;
+      const arr: number[] = headerRow.map(r => r.count);
+      const customArr = [];
+      let count = 0;
       for (let x = 0; x < this.colCount; x++) {
-        
+        const gridVal = this.grid[y][x];
+        const userGridVal = this.userGrid[y][x];
+          if (this.userGrid[y][x] !== 1 && count > 0) {
+            customArr.push(count);
+            count = 0;
+          } else if (this.userGrid[y][x] === 1) {
+            count++;
+          }
       }
+
+      
     }
+
   }
 
   private isRowFilled(y: number): boolean {

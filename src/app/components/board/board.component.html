@@ -10,27 +10,31 @@
 
 <div class="board-container">
   <div class="board-title-bar">
-    {{rowCount + ' x ' + rowCount}}
+    <span>Board: {{rowCount + ' x ' + rowCount}}</span>
+    <div class="lives"
+      [class.lost]="lifeLost">
+      <span>Lives: {{lives}}</span>
+    </div>
   </div>
   <div #bigContainer 
     class="big-container"
     [style.grid]="'1fr ' + gridSize + 'px 1fr / 1fr ' + gridSize + 'px 1fr'">
     <div class="col-headers header-area">
-      <div *ngFor="let hCol of cols; index as colIndex" 
+      <div *ngFor="let colKey of cols.keys()" 
         class="col-header"
         [style.width.px]="gridBoxSize">
-        <span *ngFor="let hc of hCol" 
+        <span *ngFor="let headerData of cols.get(colKey)" 
           class="header-box"
-          [style.opacity]="colFilledMap.get(colIndex) ? '0.2' : '1'">{{hc}}</span>
+          [style.opacity]="headerData?.found ? '0.2' : '1'">{{headerData?.count}}</span>
       </div>
     </div>
     <div class="row-headers header-area">
-      <div *ngFor="let hRow of rows; index as rowIndex" 
+      <div *ngFor="let rowKey of rows.keys()" 
         class="row-header"
         [style.height.px]="gridBoxSize">
-        <span *ngFor="let hr of hRow" 
+        <span *ngFor="let headerData of rows.get(rowKey)" 
           class="header-box"
-          [style.opacity]="rowFilledMap.get(rowIndex) ? '0.2' : '1'">{{hr}}</span>
+          [style.opacity]="headerData?.found ? '0.2' : '1'">{{headerData?.count}}</span>
       </div>
     </div>
     <div class="grid"
@@ -49,14 +53,10 @@
           (mouseover)="onGridPointHover($event, x, y)"></div>
       </ng-container>
     </div>
-    <div class="lives"
-      [class.lost]="lifeLost">
-      <span>Lives: {{lives}}</span>
-    </div>
   </div>
 </div>
 
-<ng-container *ngIf="gameComplete">
+<!-- <ng-container *ngIf="gameComplete">
   <div class="modal-container">
     <div class="modal">
       <button>View Board</button>
@@ -65,4 +65,4 @@
       <button>Back to Game Modes</button>
     </div>
   </div>
-</ng-container>
+</ng-container> -->

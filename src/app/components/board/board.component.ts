@@ -11,6 +11,11 @@ interface CellDragState {
   direction: DragDirection
 }
 
+interface HeaderData {
+  count: number,
+  found: boolean
+}
+
 class DragState {
   cellStates = [];
   button!: MouseButtonDrag;
@@ -67,8 +72,8 @@ export class BoardComponent implements OnInit, AfterViewInit {
   size = 0;
   adjustedSize = 0; // size after subtracting handicap fill points
   grid: number[][] = [];
-  rows: number[][] = [];
-  cols: number[][] = [];
+  rows: Map<number, HeaderData[]> = new Map();
+  cols: Map<number, HeaderData[]> = new Map();
   userGridInitial: number[][] = [];
   userGrid: number[][] = [];
   rowFilledMap: Map<number, boolean> = new Map();
@@ -162,38 +167,42 @@ export class BoardComponent implements OnInit, AfterViewInit {
   private setRowAndColumnHeaders(): void {
     // rows
     for (let y = 0; y < this.rowCount; y++) {
-      this.rows[y] = [];
+      const headerData: HeaderData[] = [];
       let count = 0;
       for (let x = 0; x < this.colCount; x++) {
         if (this.grid[y][x] === 1) {
           count++;
         } else {
           if (count > 0) {
-            this.rows[y].push(count)
+            headerData.push({count: count, found: false})
             count = 0;
           }
         }
       }
       if (count > 0)
-        this.rows[y].push(count)
+        headerData.push({count: count, found: false})
+
+      this.rows.set(y, headerData);
     }
 
     // cols
     for (let y = 0; y < this.rowCount; y++) {
-      this.cols[y] = [];
+      const headerData: HeaderData[] = [];
       let count = 0;
       for (let x = 0; x < this.colCount; x++) {
         if (this.grid[x][y] === 1) {
           count++;
         } else {
           if (count > 0) {
-            this.cols[y].push(count)
+            headerData.push({count: count, found: false})
             count = 0;
           }
         }
       }
       if (count > 0)
-        this.cols[y].push(count)
+        headerData.push({count: count, found: false})
+
+      this.cols.set(y, headerData);
     }
   }
 
@@ -249,15 +258,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
     }
 
     // check if row or col has been completed
-    if (this.isRowFilled(y)) {
-      this.rowFilledMap.set(y, true);
-      this.rowsFilled++;
-    }
-    
-    if (this.isColFilled(x)) {
-      this.colFilledMap.set(x, true);
-      this.colsFilled++;
-    }
+    this.checkRowColFilled(x, y);
 
     // subtract lives if incorrect choice
     if (gridSlotIsFilled && guessedX || !gridSlotIsFilled && guessedFill) {
@@ -274,6 +275,33 @@ export class BoardComponent implements OnInit, AfterViewInit {
     // handle end of winning game
     if (this.rowsFilled === this.rowCount && this.colsFilled === this.colCount) {
       this.gameComplete = true;
+    }
+  }
+
+  private checkRowColFilled(x: number, y: number) {
+    if (this.isRowFilled(y)) {
+      this.rowFilledMap.set(y, true);
+      this.rowsFilled++;
+    }
+    
+    if (this.isColFilled(x)) {
+      this.colFilledMap.set(x, true);
+      this.colsFilled++;
+    }
+
+    // check row & col this cell was in
+    // for both row & col:
+    //  check for consecutive completed sections at beginning & end of array
+    // note: completed section
+
+    // row
+    let headerRowIndex = 0;
+    let headerRow = this.rows.get(y);
+    if (headerRow) {
+      const count: number = headerRow[headerRowIndex]?.count;
+      for (let x = 0; x < this.colCount; x++) {
+        
+      }
     }
   }
 

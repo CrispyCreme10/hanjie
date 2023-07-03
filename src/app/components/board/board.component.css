@@ -39,10 +39,15 @@
 
 .board-title-bar {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   margin-top: 10px;
   font-size: 2rem;
   font-weight: 500;
+}
+
+.board-title-bar > span {
+  text-align: center;
 }
 
 .big-container {

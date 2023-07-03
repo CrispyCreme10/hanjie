@@ -1,11 +1,34 @@
 :host {
   --thick-lines: 3px solid black;
   --thin-lines: 1px solid black;
+
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.menu {
+  flex-direction: column;
+  width: 250px;
+  background-color: grey;
+  box-shadow: inset 0px 0px 10px 0px black;
+  padding: 5px 10px;
+  text-transform: uppercase;
+  transition: all 1s;
+}
+
+.menu-button {
+  padding: 5px 10px;
+}
+
+.menu-button fa-icon:hover {
+  cursor: pointer;
 }
 
 .big-container {
   display: grid;
   height: 100%;
+  flex-grow: 1;
 }
 
 .header-area {

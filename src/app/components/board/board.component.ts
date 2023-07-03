@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { BoardOptions, BoardRouteData, BoardService } from 'src/app/services/board.service';
 
 type MouseButtonDrag = 'left' | 'right';
@@ -88,6 +89,10 @@ export class BoardComponent implements OnInit, AfterViewInit {
 
   opts!: BoardOptions;
   dragState!: DragState | null;
+
+  isMenuOpen = false;
+
+  faBars = faBars;
 
   constructor(
     private boardService: BoardService,
@@ -381,5 +386,9 @@ export class BoardComponent implements OnInit, AfterViewInit {
         // apply styles
       }
     }
+  }
+
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
   }
 }

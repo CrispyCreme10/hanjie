@@ -1,3 +1,13 @@
+<div class="menu"
+  [style.display]="isMenuOpen ? 'flex' : 'none'">
+  <span>Home</span>
+  <span>Refresh</span>
+</div>
+
+<div class="menu-button">
+  <fa-icon [icon]="faBars" (click)="toggleMenu()"></fa-icon>
+</div>
+
 <div #bigContainer 
   class="big-container"
   [style.grid]="'1fr ' + gridSize + 'px 1fr / 1fr ' + gridSize + 'px 1fr'">

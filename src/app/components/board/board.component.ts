@@ -298,20 +298,26 @@ export class BoardComponent implements OnInit, AfterViewInit {
     let headerRow = this.rows.get(y);
     if (headerRow) {
       const arr: number[] = headerRow.map(r => r.count);
-      const customArr = [];
+      const customArr: boolean[] = [];
+      let filledStarted = false;
       let count = 0;
       for (let x = 0; x < this.colCount; x++) {
         const gridVal = this.grid[y][x];
         const userGridVal = this.userGrid[y][x];
-          if (this.userGrid[y][x] !== 1 && count > 0) {
-            customArr.push(count);
-            count = 0;
-          } else if (this.userGrid[y][x] === 1) {
+        if (gridVal === 1) {
+          filledStarted = true;
+          if (userGridVal === 1) {
             count++;
           }
+        } else {
+          if (filledStarted)
+            customArr.push(count === arr[customArr.length]);
+          count = 0;
+          filledStarted = false;
+        }
       }
 
-      
+      console.log(customArr);
     }
 
   }
